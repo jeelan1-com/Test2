@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JeelanPro AI</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: white;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        /* ::-webkit-scrollbar {
+            z-index: 2;
+        } */
+
+        #app {
+            display: block;
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            background: rgb(34, 34, 34);
+        }
+
+        #app #QBox {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% - 40px);
+            max-width: 600px;
+            height: 100px;
+            background: #1e1e1e;
+            border-radius: 30px;
+            box-shadow: 0px 0px 100px 10px #5a5a5a;
+            /* box-shadow: 0px 0px 10px 5px #5a5a5a; */
+            /* box-shadow: 0px 0px 20px 5px #5a5a5a; */
+            /* box-shadow: 0px 0px 20px 5px #8d8d8d; */
+            /* box-shadow: 0px 0px 10px 1px #8d8d8d; */
+            /* box-shadow: 0px 0px 50px 10px #8d8d8d; */
+            transition: 0.3s;
+            overflow: hidden;
+            z-index: 4;
+            animation: atractingAnimation 5s ease-in-out infinite;
+            /* cursor: text; */
+        }
+
+        @keyframes atractingAnimation {
+            0% {
+                box-shadow: 0px 0px 100px 10px #5a5a5a;
+            }
+
+            50% {
+                box-shadow: 0px 0px 100px 10px #7e7e7e;
+            }
+
+            100% {
+                box-shadow: 0px 0px 100px 10px #5a5a5a;
+            }
+
+        }
+
+        #app #QBox #textbox {
+            position: absolute;
+            display: block;
+            width: calc(100% - 40px);
+            top: 20px;
+            left: 20px;
+            padding: 0px;
+            padding-bottom: 0px;
+            cursor: text;
+            border: none;
+            outline: none;
+            color: rgb(158, 158, 158);
+            font-size: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            transition: 0.3s;
+            /* outline: 1px solid white; */
+            scrollbar-color: rgb(128, 128, 128) #2e2e2e00;
+        }
+
+        #app #QBox #textbox[contentEditable=true]:empty:before {
+            content: attr(placeholder);
+            color: rgb(102 102 102);
+            background: linear-gradient(180deg, rgb(136, 136, 136) 0%, rgb(94, 94, 94) 100%);
+            color: transparent;
+            background-clip: text;
+        }
+
+        #app #QBox #menu {
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            bottom: 0px;
+            left: 0px;
+        }
+
+        #app #QBox #menu #modelBtn {
+            position: absolute;
+            width: auto;
+            padding-right: 30px;
+            height: 30px;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 30px;
+            user-select: none;
+            overflow: hidden;
+            transition: 0.3s;
+            cursor: default;
+        }
+
+        #app #QBox #menu #modelBtn:hover {
+            background: rgb(90, 90, 90);
+        }
+
+        #app #QBox #menu #modelBtn #modelName {
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 10px;
+            transition: 0.3s;
+            font-size: 16px;
+            color: rgb(185, 185, 185);
+        }
+
+        #app #QBox #menu #modelBtn #modelBtnArrow {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            right: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            color: rgb(138, 138, 138);
+        }
+
+        #app #QBox #menu #sentBtn {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+            color: rgb(66, 66, 66);
+            background: rgb(240, 240, 240);
+            color: rgb(224, 224, 224);
+            background: rgba(70, 70, 70, 0);
+
+            color: rgb(145, 145, 145);
+            background: rgb(90, 90, 90);
+
+            color: rgb(122, 122, 122);
+            background: rgb(61, 61, 61);
+            user-select: none;
+            transition: 0.3s;
+            cursor: default;
+        }
+
+        #app #QBox #menu #sentBtn[sent="true"]:hover {
+            height: 40px;
+            width: 40px;
+            right: 5px;
+            font-size: 18px;
+        }
+
+        #app #hoverTitle {
+            position: absolute;
+            width: auto;
+            max-width: 100px;
+            height: auto;
+            min-height: 20px;
+            top: 0px;
+            left: 0px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 12px;
+            text-shadow: 0px 0px 5px #252525;
+            color: #d4d4d4;
+            background: #686868;
+            user-select: none;
+            z-index: 2;
+            /* box-shadow: 0px 0px 5px 1px #000000; */
+            opacity: 0;
+            display: none;
+        }
+
+        #app #hoverTitle::after {
+            content: "";
+            position: absolute;
+            width: 0px;
+            z-index: 1;
+            height: 0px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 10px solid transparent;
+            border-top: 10px solid #686868;
+        }
+
+        #app #chatBox {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            scrollbar-color: rgb(128, 128, 128) #2e2e2e00;
+            /* user-select: auto; */
+
+            /* outline: 1px solid white; */
+        }
+
+        #app #chatBox #page {
+            position: absolute;
+            left: 50%;
+            top: 0px;
+            transform: translate(-50%, 0%);
+            width: 100%;
+            height: auto;
+            /* background-color: green; */
+            width: calc(100% - 40px);
+            max-width: 600px;
+            z-index: 1;
+            padding-top: 50px;
+            /* outline: 1px solid white; */
+            /* user-select: auto; */
+            padding-bottom: 180px;
+        }
+
+        #app #chatBox #page #userQuestion {
+            position: relative;
+            width: 100%;
+            height: auto;
+            /* background-color: #1e1e1e; */
+            display: flex;
+            flex-direction: row-reverse;
+            /* outline: 1px solid white; */
+        }
+
+        #app #chatBox #page #userQuestion #outerBody {
+            position: relative;
+            display: inline-block;
+            width: auto;
+            height: auto;
+            background: rgb(56, 56, 56);
+            border-radius: 15px;
+            padding: 10px;
+            margin: 10px;
+            max-width: calc(100% - 20px - 20px - 40px);
+            /* outline: 1px solid white; */
+            animation: QuestionAnimation 0.5s ease-in-out;
+        }
+
+        @keyframes QuestionAnimation {
+            0% {
+                opacity: 0;
+                top: 30px;
+                z-index: 10;
+            }
+
+            100% {
+                opacity: 1;
+                top: 0px;
+            }
+        }
+
+        #app #chatBox #page #userQuestion #outerBody #text {
+            position: relative;
+            display: inline-block;
+            width: auto;
+            height: auto;
+            font-size: 16px;
+            /* background: linear-gradient(180deg, rgb(221, 221, 221) 0%, rgb(156, 156, 156) 100%);
+            background-clip: text;
+            color: transparent; */
+            color: rgb(216, 216, 216);
+            text-shadow: 0px 0px 5px #000000;
+            /* outline: 1px solid white; */
+        }
+
+        #app #chatBox #page #botResponse {
+            position: relative;
+            width: 100%;
+            height: auto;
+            /* background-color: #1e1e1e; */
+            display: flex;
+            flex-direction: row;
+            /* outline: 1px solid white; */
+        }
+
+        #app #chatBox #page #botResponse #text {
+            position: relative;
+            display: inline-block;
+            width: auto;
+            height: auto;
+            /* background: rgb(56, 56, 56); */
+            /* border-radius: 10px; */
+            /* padding: 10px; */
+            margin: 10px;
+            /* max-width: calc(100% - 20px - 20px - 40px); */
+            font-size: 16px;
+            color: rgb(216, 216, 216);
+            text-shadow: 0px 0px 5px #000000;
+            /* outline: 1px solid white; */
+            /* user-select: auto; */
+            transition: 0.3s;
+            animation: QuestionAnimation 0.5s ease-in-out;
+        }
+
+        #app #styling {
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+            width: calc(100% - 20px);
+            height: 100%;
+            background: linear-gradient(180deg, #22222200 0%, #222222 50%);
+            z-index: 3;
+        }
+
+        #app #loadingQuestion {
+            position: relative;
+            width: 100%;
+            height: auto;
+            /* background-color: #1e1e1e; */
+            display: flex;
+            flex-direction: row-reverse;
+            /* outline: 1px solid white; */
+        }
+
+        #app #loadingQuestion #animation {
+            position: relative;
+            margin: 10px;
+            width: calc(100% - 20px);
+            height: 100px;
+            background: rgb(56, 56, 56);
+            border-radius: 15px;
+            margin: 10px;
+            box-shadow: 0px 0px 10px 10px #8d8d8d inset;
+            animation: loadingAnimation 1s linear infinite;
+        }
+
+        @keyframes loadingAnimation {
+            0% {
+                box-shadow: 0px 0px 20px 5px #ff6f61 inset;
+                background: #4b2c2c;
+            }
+
+            25% {
+                box-shadow: 0px 0px 30px 10px #5a3d0b inset;
+                background: #5a3d0b;
+            }
+
+            50% {
+                box-shadow: 0px 0px 40px 15px #1f4b1f inset;
+                background: #1f4b1f;
+            }
+
+            75% {
+                box-shadow: 0px 0px 30px 10px #1b3b5a inset;
+                background: #1b3b5a;
+            }
+
+            100% {
+                box-shadow: 0px 0px 20px 5px #4b2c2c inset;
+                background: #4b2c2c;
+            }
+        }
+
+        #app #loadingQuestion #animation .animEL {
+            position: absolute;
+            width: 50px;
+            height: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="hoverTitle">Sent Message</div>
+        <div id="styling"></div>
+        <div id="chatBox">
+
+            <div id="page">
+
+                <!-- <div id="userQuestion">
+                    <div id="outerBody">
+                        <div id="text">Hello, JeelanPro AI</div>
+                    </div>
+                </div> -->
+
+                <!-- <div id="loadingQuestion">
+                    <div id="animation">
+                <div class="animEL" id="animA"></div>
+                        <div class="animEL" id="animB"></div>
+                        <div class="animEL" id="animC"></div>
+                        <div class="animEL" id="animD"></div>
+                        <div class="animEL" id="animE"></div>
+                        <div class="animEL" id="animF"></div>
+                        <div class="animEL" id="animG"></div>
+                </div>
+                </div> -->
+
+                <!-- <div id="botResponse">
+                    <div id="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat nobis similique architecto quod enim exercitationem consequatur maiores consequuntur. Veritatis deleniti fugiat aut nihil. Odio nihil voluptatem iusto est voluptate eum.</div>
+                </div> -->
+
+            </div>
+        </div>
+        <div id="QBox">
+            <div id="textbox" contenteditable="true" placeholder="Ask JeelanPro AI"></div>
+            <div id="menu">
+                <div id="modelBtn">
+                    <div id="modelName">JPEAI-1</div>
+                    <div id="modelBtnArrow">▼</div>
+                </div>
+                <div id="sentBtn" sent="false">▶</div>
+            </div>
+        </div>
+    </div>
+    <script src="https://js.puter.com/v2/"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        puter.print(` `);
+        let siteStage = 1;
+
+        let device;
+        let userAgent = navigator.userAgent.toLowerCase();
+        device = /mobile|android|iphone|ipad|ipod/.test(userAgent) ? "m" : "c";
+
+        let QBox = document.querySelector("#app #QBox");
+        let textbox = document.querySelector("#app #QBox #textbox");
+        let Qbox_menu = document.querySelector("#app #QBox #menu");
+        let sentBtn = document.querySelector("#app #QBox #menu #sentBtn");
+
+        let hoverTitle = document.querySelector("#app #hoverTitle");
+
+        let styling = document.querySelector("#app #styling");
+
+        sentBtn.addEventListener("mousemove", function () {
+            let sentBtnX = sentBtn.getBoundingClientRect().x;
+            let sentBtnY = sentBtn.getBoundingClientRect().y;
+            hoverTitle.style.display = "flex";
+            hoverTitle.style.left = sentBtnX + sentBtn.clientWidth / 2 - hoverTitle.clientWidth / 2 + "px";
+            hoverTitle.style.top = sentBtnY - hoverTitle.clientHeight - 10 + "px";
+            setTimeout(() => {
+                hoverTitle.style.transition = "0.3s";
+                hoverTitle.style.opacity = 1;
+                setTimeout(() => {
+                    hoverTitle.style.transition = "0s";
+                }, 30);
+            }, 10);
+        });
+        sentBtn.addEventListener("mouseout", function () {
+            hoverTitle.style.transition = "0.3s";
+            hoverTitle.style.opacity = 0;
+            setTimeout(() => {
+                hoverTitle.style.display = "none";
+                hoverTitle.style.transition = "0s";
+            }, 300);
+        });
+        QBox.addEventListener("click", function () {
+            textbox.focus();
+        });
+        QBox.addEventListener("touchstart", function () {
+            textbox.focus();
+        });
+
+        QBox.style.height = textbox.clientHeight + 20 + Qbox_menu.clientHeight + "px";
+        styling.style.height = QBox.clientHeight + 20 + "px";
+
+        function updateTextboxUI() {
+            styling.style.height = QBox.clientHeight + "px";
+            QBox.style.height = textbox.clientHeight + 20 + Qbox_menu.clientHeight + "px";
+            if (textbox.innerHTML === '<div><br></div>' || textbox.innerHTML === '<br>') {
+                textbox.innerHTML = '';
+            }
+            if (textbox.innerHTML == "") {
+                sentBtn.setAttribute("sent", "false");
+                sentBtn.style.color = "rgb(224, 224, 224)";
+                sentBtn.style.background = "rgba(70, 70, 70, 0)";
+                sentBtn.style.color = "rgb(145, 145, 145)";
+                sentBtn.style.background = "rgb(90, 90, 90)";
+            } else {
+                sentBtn.style.color = "rgb(66, 66, 66)";
+                sentBtn.style.background = "rgb(240, 240, 240)";
+                sentBtn.setAttribute("sent", "true");
+            }
+        }
+
+        textbox.addEventListener("input", function () {
+            updateTextboxUI();
+        });
+        textbox.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                if (textbox.innerHTML !== "") {
+                    sent();
+                }
+            } else if (e.key === "Enter" && e.shiftKey) {
+                e.preventDefault();
+                document.execCommand("insertHTML", false, "<br><br>");
+            }
+        });
+        textbox.addEventListener("paste", function (e) {
+            e.preventDefault();
+            let text = e.clipboardData.getData("text/plain");
+            document.execCommand("insertText", false, text.replace(/\n/g, '\n'));
+        });
+        // sent();
+
+        function sent() {
+            if (siteStage == 1) {
+                let UserQuestionText = textbox.innerText;
+                textbox.innerHTML = "";
+                updateTextboxUI();
+
+                let QBoxY = QBox.getBoundingClientRect().y;
+                let QBoxHeight = QBox.getBoundingClientRect().height;
+
+                let page = document.querySelector("#app #chatBox #page");
+                QBox.style.transition = "0s";
+                setTimeout(() => {
+                    QBox.style.top = "auto";
+                    QBox.style.bottom = QBoxY + "px";
+                    QBox.style.transform = "translate(-50%, 0%)";
+
+                    setTimeout(() => {
+                        QBox.style.transition = "0.5s";
+
+                        setTimeout(() => {
+                            QBox.style.bottom = "20px";
+                            // QBox.style.boxShadow = "0px 0px 0px 0px transparent";
+                            QBox.style.boxShadow = "0px 0px 10px 1px #8d8d8d";
+                            QBox.style.animation = "none";
+                            // QBox.style.padding = "20px";
+
+                            setTimeout(() => {
+                                QBox.style.padding = "0px";
+                                QBox.style.transition = "0.3s";
+                                siteStage = 2;
+
+                                let QEL = document.createElement("div");
+                                QEL.setAttribute("id", "userQuestion");
+                                // QEL.innerHTML = `
+                                //     <div id="outerBody">
+                                //         <div id="text">${UserQuestionText}</div>
+                                //     </div>
+                                // `;
+                                let QEL1 = document.createElement("div");
+                                QEL1.setAttribute("id", "outerBody");
+                                let QEL2 = document.createElement("div");
+                                QEL2.setAttribute("id", "text");
+                                QEL2.innerText = UserQuestionText;
+                                QEL1.appendChild(QEL2);
+                                QEL.appendChild(QEL1);
+                                page.appendChild(QEL);
+                                sentContinue(UserQuestionText);
+                            }, 10);
+
+                        }, 20);
+
+                    }, 20);
+
+                }, 20);
+            } else if (siteStage == 2) {
+                let UserQuestionText = textbox.innerText;
+                textbox.innerHTML = "";
+                updateTextboxUI();
+                let QEL = document.createElement("div");
+                QEL.setAttribute("id", "userQuestion");
+                // QEL.innerHTML = `
+                //     <div id="outerBody">
+                //         <div id="text">${UserQuestionText}</div>
+                //     </div>
+                // `;
+                let QEL1 = document.createElement("div");
+                QEL1.setAttribute("id", "outerBody");
+                let QEL2 = document.createElement("div");
+                QEL2.setAttribute("id", "text");
+                QEL2.innerText = UserQuestionText;
+                QEL1.appendChild(QEL2);
+                QEL.appendChild(QEL1);
+                page.appendChild(QEL);
+                sentContinue(UserQuestionText);
+            }
+        }
+
+        let messages = [];
+
+        async function sentContinue(question1) {
+            // let responseOfAI = askAI(question1);
+            // let botResponseText = document.createElement("div");
+            // botResponseText.setAttribute("id", "botResponse");
+            // botResponseText.innerHTML = `
+            //     <div id="text">${responseOfAI}</div>
+            // `;
+            // page.appendChild(botResponseText);
+            // askAI(question1, function(response) {
+            //     let botResponseText = document.createElement("div");
+            //     botResponseText.setAttribute("id", "botResponse");
+            //     botResponseText.innerHTML = `
+            //         <div id="text">${response}</div>
+            //     `;
+            //     page.appendChild(botResponseText);
+            //     page.scrollTop = page.scrollHeight;
+            // });
+
+            /* 
+            
+                , false, {
+                // model: "gpt-4o",
+                // stream: "false",
+                tools: [
+                    {
+                        type: "function",
+                        function: {
+                            name: "ai_generate_image",
+                            description: "Generate an image if user is asking for it.",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    request: {
+                                        type: "string",
+                                        description: "Provide a detailed and specific description of the image you want to generate. Include aspects such as style, colors, objects, background, and any other relevant details to ensure the AI can create an accurate representation of your vision."
+                                    }
+                                },
+                                required: ["request"],
+                                additionalProperties: false
+                            },
+                            strict: false
+                        }
+                    }
+                ],
+            }*/
+
+
+            messages.push({ content: question1, role: 'user' });
+
+            let puterOption = {
+                tools: [
+                    {
+                        type: "function",
+                        function: {
+                            name: "generateImage",
+                            description: "Generate an image if user is asking for it",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    prompt: {
+                                        type: "string",
+                                        description: "Provide a detailed and specific description of the image you want to generate. Include aspects such as style, colors, objects, background, and any other relevant details to ensure the AI can create an accurate representation of your vision."
+                                    }
+                                },
+                                required: ["prompt"],
+                                additionalProperties: false
+                            },
+                            strict: true
+                        }
+                    }
+                ],
+            };
+
+            puter.ai.chat(messages, puterOption).then(response => {
+                if (response.message.tool_calls && response.message.tool_calls.length > 0) {
+                    let toolCalls = response.message.tool_calls;
+                    for (let i = 0; i < toolCalls.length; i++) {
+                        let toolCall = toolCalls[i];
+                        if (toolCall.function.name === 'generateImage') {
+                            // Parse the arguments and get weather data
+                            const args = JSON.parse(toolCall.function.arguments);
+                            generateImage(args.prompt);
+                        }
+                    }
+                } else {
+                    let botResponseText = document.createElement("div");
+                    botResponseText.setAttribute("id", "botResponse");
+                    // botResponseText.innerHTML = `
+                    //     <div id="text">${response}</div>
+                    // `;
+                    let botResponseText1 = document.createElement("div");
+                    botResponseText1.setAttribute("id", "text");
+                    botResponseText1.innerText = response;
+                    botResponseText.appendChild(botResponseText1);
+                    page.appendChild(botResponseText);
+                    page.scrollTop = page.scrollHeight;
+                    messages.push(response.message);
+                    console.log(messages);
+                }
+            }).catch(error => {
+                console.error("AI response error:", error);
+            });
+        }
+
+        /*function generateImage(prompt,) {
+            // alert("Image generation request: " + prompt);
+            // // return "The image has been generated successfully and add as well";
+            // let botResponseText = document.createElement("div");
+            // botResponseText.setAttribute("id", "botResponse");
+            // if (textForUserFirst != null) {
+            //     let botResponseText1 = document.createElement("div");
+            //     botResponseText1.setAttribute("id", "text");
+            //     botResponseText1.innerText = textForUserFirst;
+            //     botResponseText.appendChild(botResponseText1);
+            // }
+            puter.ai.txt2img(prompt, false).then((image)=>{
+                let botResponseText = document.createElement("div");
+                botResponseText.setAttribute("id", "botResponse");
+                let botResponseText1 = document.createElement("div");
+                botResponseText1.setAttribute("id", "text");
+                botResponseText1.innerHTML = `<img src="${image}" style="width: 100%; height: auto; border-radius: 10px;">`;
+                botResponseText.appendChild(botResponseText1);
+                page.scrollTop = page.scrollHeight;
+                // if (testForUserEnd != null) {
+                //     let botResponseText1 = document.createElement("div");
+                //     botResponseText1.setAttribute("id", "text");
+                //     botResponseText1.innerText = testForUserEnd;
+                //     botResponseText.appendChild(botResponseText1);
+                // }
+            });
+            page.appendChild(botResponseText);
+        }*/
+        // generateImage("Create a beautiful image of a sunset over the mountains with vibrant colors and a clear sky.");
+        function generateImage(prompt) {
+            // alert("Image generation request: " + prompt);
+            // return "The image has been generated successfully and add as well";
+            puter.ai.txt2img(prompt, false).then((image)=>{
+                // alert("World");
+                let botResponseText = document.createElement("div");
+                botResponseText.setAttribute("id", "botResponse");
+                let botResponseText1 = document.createElement("div");
+                botResponseText1.setAttribute("id", "text");
+                botResponseText1.innerHTML = `<img src="${image}" style="width: 100%; height: auto; border-radius: 10px;">`;
+                botResponseText.appendChild(botResponseText1);
+                page.appendChild(botResponseText);
+                page.scrollTop = page.scrollHeight;
+            });
+        }
+
+        sentBtn.addEventListener("click", function () {
+            if (sentBtn.getAttribute("sent") == "true") {
+                sent();
+            } else {
+                textbox.focus();
+            }
+        });
+        sentBtn.addEventListener("touchstart", function () {
+            if (sentBtn.getAttribute("sent") == "true") {
+                sent();
+            } else {
+                textbox.focus();
+            }
+        });
+    </script>
+</body>
+
+</html>
